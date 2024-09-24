@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import ConfigMenu from './ConfigMenu';
 import GameScreen from './GameScreen';
 import ResultsScreen from './ResultsScreen';
-import { GameConfig, GameState, GameResults } from '../lib/types';
+import { GameConfig, GameState, GameResults, LoggedAnswer } from '../lib/types';
 import styles from './MathPracticeApp.module.css';
 
 const MathPracticeApp: React.FC = () => {
@@ -17,8 +17,8 @@ const MathPracticeApp: React.FC = () => {
     setGameState('game');
   };
 
-  const handleGameComplete = (time: number, score: number, totalQuestions: number) => {
-    setGameResults({ time, score, totalQuestions });
+  const handleGameComplete = (time: number, score: number, totalQuestions: number, loggedAnswers: LoggedAnswer[]) => {
+    setGameResults({ time, score, totalQuestions, loggedAnswers });
     setGameState('results');
   };
 
@@ -41,6 +41,7 @@ const MathPracticeApp: React.FC = () => {
           time={gameResults.time}
           score={gameResults.score}
           totalQuestions={gameResults.totalQuestions}
+          loggedAnswers={gameResults.loggedAnswers}
           onPlayAgain={handlePlayAgain}
           onGoToConfig={handleGoToConfig}
         />

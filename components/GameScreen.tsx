@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Question, GameConfig } from '../lib/types';
+import { Question, GameConfig, LoggedAnswer } from '../lib/types';
 import { Button } from './ui/button';
 import { generateQuestion, checkAnswer } from '../lib/mathUtils';
 
 interface GameScreenProps {
   config: GameConfig;
-  onGameComplete: (time: number, score: number, totalQuestions: number) => void;
+  onGameComplete: (time: number, score: number, totalQuestions: number, loggedAnswers: LoggedAnswer[]) => void;
   onEnd: () => void;
 }
 
@@ -17,12 +17,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ config, onGameComplete, onEnd }
   const [timeLeft, setTimeLeft] = useState(config.timeLimit);
   const [startTime] = useState(Date.now());
   const [isPaused, setIsPaused] = useState(false);
+  const [loggedAnswers, setLoggedAnswers] = useState<LoggedAnswer[]>([]);
 
   const handleGameEnd = useCallback(() => {
     const endTime = Date.now();
     const timeTaken = (endTime - startTime) / 1000;
-    onGameComplete(timeTaken, score, config.numQuestions);
-  }, [onGameComplete, score, startTime, config.numQuestions]);
+    onGameComplete(timeTaken, score, config.numQuestions, loggedAnswers);
+  }, [onGameComplete, score, startTime, config.numQuestions, loggedAnswers]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -48,9 +49,18 @@ const GameScreen: React.FC<GameScreenProps> = ({ config, onGameComplete, onEnd }
   }, [questionNumber, config.numQuestions, handleGameEnd]);
 
   const handleSubmit = () => {
-    if (checkAnswer(currentQuestion, parseInt(userAnswer))) {
+    const isCorrect = checkAnswer(currentQuestion, parseInt(userAnswer));
+    if (isCorrect) {
       setScore((prev) => prev + 1);
     }
+    
+    setLoggedAnswers(prev => [...prev, {
+      question: `${currentQuestion.num1} ${currentQuestion.operator} ${currentQuestion.num2}`,
+      userAnswer: parseInt(userAnswer),
+      correctAnswer: currentQuestion.answer,
+      isCorrect
+    }]);
+
     setUserAnswer('');
     setQuestionNumber((prev) => prev + 1);
     setCurrentQuestion(generateQuestion(config));

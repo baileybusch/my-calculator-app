@@ -5,23 +5,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #f0f4f8;
 }
 
 .resultsScreen {
-  max-width: 400px;
+  max-width: 600px;
+  width: 90%;
   padding: 2rem;
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
   position: relative;
-  z-index: 1001; /* Ensure it's above the confetti */
+  z-index: 1001;
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #333;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .resultItem {
@@ -31,30 +33,10 @@
 }
 
 .percentage {
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: bold;
   color: #4caf50;
-  margin: 1rem 0;
-}
-
-.perfectScore {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #ffd700;
-  margin: 1rem 0;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
+  margin: 1.5rem 0;
 }
 
 .buttonContainer {
@@ -64,9 +46,75 @@
   gap: 1rem;
 }
 
-.button {
+.button, .toggleButton {
   flex: 1;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   font-size: 1rem;
   min-width: 120px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover, .toggleButton:hover {
+  background-color: #333333;
+}
+
+.toggleButton {
+  margin-bottom: 1rem;
+}
+
+.tableContainer {
+  margin-top: 2rem;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.answerTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.answerTable th,
+.answerTable td {
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+  text-align: left;
+}
+
+.answerTable th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+
+.correctAnswer {
+  background-color: #e8f5e9;
+}
+
+.incorrectAnswer {
+  background-color: #ffebee;
+}
+
+@media (max-width: 600px) {
+  .resultsScreen {
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .percentage {
+    font-size: 3rem;
+  }
+
+  .button, .toggleButton {
+    padding: 0.5rem 0.75rem;
+  }
 }
