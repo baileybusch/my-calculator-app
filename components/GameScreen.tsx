@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Question, GameConfig } from '../lib/types';
 import { Button } from './ui/button';
 import { generateQuestion, checkAnswer } from '../lib/mathUtils';
@@ -18,6 +18,12 @@ const GameScreen: React.FC<GameScreenProps> = ({ config, onGameComplete, onEnd }
   const [startTime] = useState(Date.now());
   const [isPaused, setIsPaused] = useState(false);
 
+  const handleGameEnd = useCallback(() => {
+    const endTime = Date.now();
+    const timeTaken = (endTime - startTime) / 1000;
+    onGameComplete(timeTaken, score, config.numQuestions);
+  }, [onGameComplete, score, startTime, config.numQuestions]);
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (!isPaused) {
@@ -33,19 +39,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ config, onGameComplete, onEnd }
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [isPaused]);
+  }, [isPaused, handleGameEnd]);
 
   useEffect(() => {
     if (questionNumber > config.numQuestions) {
       handleGameEnd();
     }
-  }, [questionNumber, config.numQuestions]);
-
-  const handleGameEnd = () => {
-    const endTime = Date.now();
-    const timeTaken = (endTime - startTime) / 1000;
-    onGameComplete(timeTaken, score, config.numQuestions);
-  };
+  }, [questionNumber, config.numQuestions, handleGameEnd]);
 
   const handleSubmit = () => {
     if (checkAnswer(currentQuestion, parseInt(userAnswer))) {

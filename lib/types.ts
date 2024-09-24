@@ -19,12 +19,3 @@ export interface GameResults {
 }
 
 export type GameState = 'config' | 'game' | 'results';
-
-// Update the existing GameConfig interface if needed
-export interface GameConfig {
-  // ... existing properties ...
-  numberOfQuestions: number; // Make sure this property exists
-  // Add any other properties that might be needed
-}
-
-// ... any other existing types ...
